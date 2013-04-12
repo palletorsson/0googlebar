@@ -33,10 +33,10 @@ def check_google():
             if (google_request):
                 activate_to_indicator(google_request)
         except:
-            print 'Could not activate google indicator, you might need to connnect the Arduino'
+            print 'Could not activate google indicator, you might need to connect the Arduino'
 
 
-# ping the Arduino and delay next indicator window with 3 seconds
+# send request-line to regexp and delay next indicator window with 3 seconds
 def activate_to_indicator(google_request):
     global time
     time2 = datetime.datetime.now()
@@ -44,27 +44,29 @@ def activate_to_indicator(google_request):
     if diff > datetime.timedelta(seconds=1):
         time = time2
         formated_time = time2.strftime('%H:%M:%S')
-        # the Arduino is listing to for "g"
         regex_line(google_request, formated_time )
 
-
-
+# the Arduino is listing to for "g" for google and "d" for duckduckgo
 def regex_line(line, formated_time ):
-    google  = re.search(r'1e100', line)
-    duckduck = re.search(r'ec2-46-51-197-88', line)
+    goog = re.search(r'1e100', line)
+    duck = re.search(r'ec2-46-51-197-8', line) # looking for ec2-46-51-197-89 and ec2-46-51-197-88
 
-    if google:
+    if goog:
         f = 'goog'
         print " [ %s ] don't be evil" % formated_time
-        # serial.write("g")
-    elif duckduck:
+        code = "g"
+    elif duck:
         f = 'duck'
         print " [ %s ] duck duck " % formated_time
-        # serial.write("d")
+        code = "d"
     else:
-        f = 'no match'
-    return f
+        f = 'no-match'
+        code = "e"
 
+    if (run_serial):
+        serial.write(code)
+
+    return f
 
 if __name__ == '__main__':
     check_google()
