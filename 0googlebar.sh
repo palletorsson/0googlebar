@@ -18,13 +18,13 @@ fi
 GOOGLEFILTER="(port 80 or port 443) and (host google.com or host google.se)"
 ANKAFILTER="(port 80 or port 443) and (host duckduckgo.com)"
 
-tcpdump -i $MONITOR "$GOOGLEFILTER" | cut -d '.' -f1 | uniq | while read line
+tcpdump -i $MONITOR "$GOOGLEFILTER" | stdbuf -oL cut -d '.' -f1 | uniq | while read line
 do
   echo "$line: KUKEN\! Someone used google\!" >> $LOGFILE
   ./0googlebar.pl g
 done &
 
-tcpdump -i $MONITOR "$ANKAFILTER" | cut -d '.' -f1 | uniq | while read line
+tcpdump -i $MONITOR "$ANKAFILTER" | stdbuf -oL cut -d '.' -f1 | uniq | while read line
 do
   echo "$line: Anka\!" >> $LOGFILE
   ./0googlebar.pl d

@@ -24,7 +24,7 @@ void setup() {
   pinMode(10, OUTPUT);
   pinMode(13, OUTPUT);
   
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(13, OUTPUT);
   
   digitalWrite(GOOGLE, HIGH);
@@ -74,8 +74,8 @@ void blink(int channel, int delayTime)
 
 void raise(int channel)
 {
-  Serial.print("Raising  ");
-  serialWriteName(channel);
+//  Serial.print("Raising  ");
+//  serialWriteName(channel);
   digitalWrite(channel, HIGH);
 }
 
@@ -88,15 +88,13 @@ void lower(int channel)
 
 void loop()
 {
-  int x,status,mode;
+  int x,status;
 
   // Green always on
   raise(GREEN);
 
   raise(WHITE);
-  raise(ANKA);
   blink(SKANDA, 125);
-  lower(ANKA);
   lower(WHITE);
   blink(SKANDA, 125);
   
@@ -105,7 +103,6 @@ void loop()
     char motor = Serial.read();
     if (motor == 'g')
     {
-      mode=0;
       raise(GOOGLE);
       blink(WHITE, 250);
       blink(WHITE, 250);
@@ -115,14 +112,14 @@ void loop()
     }
     else if (motor == 'd')
     {
-      mode=1;
+      lower(SKANDA);
+      lower(GOOGLE);
+      lower(WHITE);
+      lower(GREEN);
+      for(int i=0;i<20;i++)
+      {
+        blink(ANKA, 50);
+      }
     }
-    else
-    {
-      mode=2;
-    }
-  }
-  else
-  {
   }
 }

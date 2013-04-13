@@ -4,7 +4,7 @@ use Device::SerialPort::Arduino;
 
 my $Arduino = Device::SerialPort::Arduino->new(
   port     => '/dev/ttyUSB0',
-  baudrate => 9600,
+  baudrate => 115200,
 
   databits => 8,
   parity   => 'none',
