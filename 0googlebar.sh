@@ -21,12 +21,11 @@ ANKAFILTER="(port 80 or port 443) and (host duckduckgo.com)"
 tcpdump -i $MONITOR "$GOOGLEFILTER" | stdbuf -oL cut -d '.' -f1 | uniq | while read line
 do
   echo "$line: KUKEN\! Someone used google\!" >> $LOGFILE
-  ./0googlebar.pl g
+  echo -n g >> send_to_arduino
 done &
 
 tcpdump -i $MONITOR "$ANKAFILTER" | stdbuf -oL cut -d '.' -f1 | uniq | while read line
 do
   echo "$line: Anka\!" >> $LOGFILE
-  ./0googlebar.pl d
+  echo -n d >> send_to_arduino
 done &
-
